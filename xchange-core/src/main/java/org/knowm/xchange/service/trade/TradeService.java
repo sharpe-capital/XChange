@@ -304,4 +304,8 @@ public interface TradeService extends BaseService {
   default Collection<Order> getOrder(OrderQueryParams... orderQueryParams) throws IOException {
     throw new NotAvailableFromExchangeException();
   }
+
+  //  public default List<Object> getPositions() throws IOException {
+  //    throw new NotYetImplementedForExchangeException();
+  //  }
 }
