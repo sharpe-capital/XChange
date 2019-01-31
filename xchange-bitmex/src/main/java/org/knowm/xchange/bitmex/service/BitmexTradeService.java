@@ -16,6 +16,7 @@ import org.knowm.xchange.bitmex.dto.trade.BitmexExecutionInstruction;
 import org.knowm.xchange.bitmex.dto.trade.BitmexOrderFlags;
 import org.knowm.xchange.bitmex.dto.trade.BitmexPlaceOrderParameters;
 import org.knowm.xchange.bitmex.dto.trade.BitmexPlaceOrderParameters.Builder;
+import org.knowm.xchange.bitmex.dto.trade.BitmexPosition;
 import org.knowm.xchange.dto.Order;
 import org.knowm.xchange.dto.marketdata.Trades.TradeSortType;
 import org.knowm.xchange.dto.trade.LimitOrder;
@@ -170,5 +171,16 @@ public class BitmexTradeService extends BitmexTradeServiceRaw implements TradeSe
             .filter(Objects::nonNull)
             .collect(Collectors.toList());
     return new UserTrades(userTrades, TradeSortType.SortByTimestamp);
+  }
+
+  @Override
+  public List<BitmexPosition> getBitmexPositions() throws ExchangeException {
+    String apiKey = exchange.getExchangeSpecification().getApiKey();
+
+    return updateRateLimit(
+        () -> bitmex.getPositions(apiKey, exchange.getNonceFactory(), signatureCreator));
+    //      List<BitmexPosition> positions = super.getBitmexPositions();
+    //
+    //      return positions;
   }
 }
