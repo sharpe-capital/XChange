@@ -3,11 +3,7 @@ package org.knowm.xchange.bitmex.service;
 import static org.knowm.xchange.bitmex.dto.trade.BitmexSide.fromOrderType;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.knowm.xchange.bitmex.BitmexAdapters;
 import org.knowm.xchange.bitmex.BitmexExchange;
@@ -19,6 +15,7 @@ import org.knowm.xchange.bitmex.dto.trade.BitmexPlaceOrderParameters.Builder;
 import org.knowm.xchange.bitmex.dto.trade.BitmexReplaceOrderParameters;
 import org.knowm.xchange.bitmex.dto.trade.BitmexPosition;
 import org.knowm.xchange.dto.Order;
+import org.knowm.xchange.dto.Position;
 import org.knowm.xchange.dto.marketdata.Trades.TradeSortType;
 import org.knowm.xchange.dto.trade.LimitOrder;
 import org.knowm.xchange.dto.trade.MarketOrder;
@@ -183,6 +180,18 @@ public class BitmexTradeService extends BitmexTradeServiceRaw implements TradeSe
             .filter(Objects::nonNull)
             .collect(Collectors.toList());
     return new UserTrades(userTrades, TradeSortType.SortByTimestamp);
+  }
+
+  @Override
+  public Optional<Position> getPosition() {
+    List<BitmexPosition> positions = getBitmexPositions();
+
+    if (positions.size() > 0) {
+      Position position = positions.get(0);
+      return Optional.of(position);
+    }
+
+    return Optional.empty();
   }
 
   @Override
