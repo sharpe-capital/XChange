@@ -279,4 +279,8 @@ public interface TradeService extends BaseService {
   default Optional<Position> getPosition() throws IOException {
     throw new NotYetImplementedForExchangeException();
   }
+
+  default String updateOrder(Order order) throws IOException {
+    throw new NotYetImplementedForExchangeException();
+  }
 }
