@@ -8,9 +8,7 @@ import java.util.stream.Collectors;
 import org.knowm.xchange.bitmex.BitmexAdapters;
 import org.knowm.xchange.bitmex.BitmexExchange;
 import org.knowm.xchange.bitmex.dto.marketdata.BitmexPrivateOrder;
-import org.knowm.xchange.bitmex.dto.trade.BitmexExecutionInstruction;
-import org.knowm.xchange.bitmex.dto.trade.BitmexOrderFlags;
-import org.knowm.xchange.bitmex.dto.trade.BitmexPlaceOrderParameters;
+import org.knowm.xchange.bitmex.dto.trade.*;
 import org.knowm.xchange.bitmex.dto.trade.BitmexPlaceOrderParameters.Builder;
 import org.knowm.xchange.bitmex.dto.trade.BitmexReplaceOrderParameters;
 import org.knowm.xchange.bitmex.dto.trade.BitmexPosition;
@@ -192,6 +190,17 @@ public class BitmexTradeService extends BitmexTradeServiceRaw implements TradeSe
     }
 
     return Optional.empty();
+  }
+
+  @Override
+  public String updateOrder(Order order) {
+    // todo implement other order requirements
+    org.knowm.xchange.bitmex.dto.trade.BitmexReplaceOrderParameters.Builder replaceOrderParameters =
+        new BitmexReplaceOrderParameters.Builder()
+            .setOrderId(order.getId())
+            .setOrderQuantity(order.getOriginalAmount())
+            .setPrice(order.getAveragePrice());
+    return replaceOrder(replaceOrderParameters.build()).getId();
   }
 
   @Override
