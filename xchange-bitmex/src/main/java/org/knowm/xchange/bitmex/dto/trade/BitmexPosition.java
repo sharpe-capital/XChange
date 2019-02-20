@@ -3,9 +3,9 @@ package org.knowm.xchange.bitmex.dto.trade;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 import org.knowm.xchange.bitmex.AbstractHttpResponseAware;
-import org.knowm.xchange.dto.Position;
 
-public class BitmexPosition extends AbstractHttpResponseAware implements Position {
+public class BitmexPosition extends AbstractHttpResponseAware {
+
   @JsonProperty("account")
   private Integer account;
 
