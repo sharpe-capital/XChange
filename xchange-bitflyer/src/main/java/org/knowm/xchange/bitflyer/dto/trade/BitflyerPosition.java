@@ -2,9 +2,8 @@ package org.knowm.xchange.bitflyer.dto.trade;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
-import org.knowm.xchange.dto.Position;
 
-public class BitflyerPosition implements Position {
+public class BitflyerPosition {
   @JsonProperty("product_code")
   public String productCode;
 

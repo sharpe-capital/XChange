@@ -172,8 +172,9 @@ public class BitmexTradeService extends BitmexTradeServiceRaw implements TradeSe
     List<BitmexPosition> positions = getBitmexPositions();
 
     if (positions.size() > 0) {
-      Position position = positions.get(0);
-      return Optional.of(position);
+      BitmexPosition position = positions.get(0);
+
+      return Optional.of(new Position(position.getCurrentQty(), position.getAvgEntryPrice()));
     }
 
     return Optional.empty();
