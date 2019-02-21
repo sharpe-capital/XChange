@@ -183,7 +183,7 @@ public class BitmexTradeService extends BitmexTradeServiceRaw implements TradeSe
   @Override
   public Optional<Position> getPosition() {
     List<BitmexPosition> positions = getBitmexPositions();
-
+    // todo no position, empth optional is confusing - failed request or no position
     if (positions.size() > 0) {
       BitmexPosition position = positions.get(0);
 
