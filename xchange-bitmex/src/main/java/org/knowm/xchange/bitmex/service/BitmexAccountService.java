@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.knowm.xchange.bitmex.BitmexAdapters;
 import org.knowm.xchange.bitmex.BitmexExchange;
 import org.knowm.xchange.bitmex.dto.account.BitmexAccount;
+import org.knowm.xchange.bitmex.dto.account.BitmexMarginAccount;
 import org.knowm.xchange.bitmex.dto.account.BitmexWallet;
 import org.knowm.xchange.currency.Currency;
 import org.knowm.xchange.dto.account.AccountInfo;
@@ -14,6 +15,7 @@ import org.knowm.xchange.dto.account.Balance;
 import org.knowm.xchange.dto.account.FundingRecord;
 import org.knowm.xchange.dto.account.Wallet;
 import org.knowm.xchange.exceptions.ExchangeException;
+import org.knowm.xchange.dto.trade.Margin;
 import org.knowm.xchange.service.account.AccountService;
 import org.knowm.xchange.service.trade.params.DefaultTradeHistoryParamCurrency;
 import org.knowm.xchange.service.trade.params.TradeHistoryParamCurrency;
@@ -68,27 +70,16 @@ public class BitmexAccountService extends BitmexAccountServiceRaw implements Acc
   }
 
   @Override
-  public List<FundingRecord> getFundingHistory(TradeHistoryParams params) {
+  public Margin getMargin() {
+    // todo make this better
+    BitmexMarginAccount bitmexMarginAccount = getBitmexMarginAccountStatus(Currency.XBT);
+    Margin margin =
+        new Margin(
+            bitmexMarginAccount.getAvailableMargin(),
+            bitmexMarginAccount.getMarginBalance(),
+            bitmexMarginAccount.getWalletBalance(),
+            bitmexMarginAccount.getUnrealisedPnl());
 
-    Currency currency = null;
-
-    if (params instanceof TradeHistoryParamCurrency) {
-      currency = ((TradeHistoryParamCurrency) params).getCurrency();
-
-      if (currency.getCurrencyCode().equals("BTC") || currency.getCurrencyCode().equals("XBT")) {
-        currency = new Currency("XBt");
-      }
-    } else {
-      throw new ExchangeException("Currency must be supplied");
-    }
-
-    return getBitmexWalletHistory(currency).stream()
-        .filter(
-            w ->
-                w.getTransactStatus().equals("Completed")
-                    && (w.getTransactType().equals("Deposit")
-                        || w.getTransactType().equals("Withdrawal")))
-        .map(w -> BitmexAdapters.adaptFundingRecord(w))
-        .collect(Collectors.toList());
+    return margin;
   }
 }

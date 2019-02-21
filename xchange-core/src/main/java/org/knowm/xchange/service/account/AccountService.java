@@ -8,6 +8,7 @@ import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.Currency;
 import org.knowm.xchange.currency.CurrencyPair;
 import org.knowm.xchange.dto.account.*;
+import org.knowm.xchange.dto.trade.Margin;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.exceptions.NotAvailableFromExchangeException;
 import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
@@ -157,6 +158,10 @@ public interface AccountService extends BaseService {
    * @throws IOException - Indication that a networking error occurred while fetching JSON data
    */
   default Balance getBalance(Currency currency) throws IOException {
+    throw new NotYetImplementedForExchangeException();
+  }
+
+  public default Margin getMargin() throws IOException {
     throw new NotYetImplementedForExchangeException();
   }
 }
