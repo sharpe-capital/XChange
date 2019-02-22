@@ -214,4 +214,14 @@ public class BitmexTradeService extends BitmexTradeServiceRaw implements TradeSe
     //
     //      return positions;
   }
+
+  @Override
+  public OpenOrders getFilledOrders() {
+    // todo creat FilledOrders object
+    List<BitmexPrivateOrder> bitmexOrders =
+        getBitmexOrders(null, "{\"ordStatus\": \"Filled\"}", null, null, null);
+
+    return new OpenOrders(
+        bitmexOrders.stream().map(BitmexAdapters::adaptOrder).collect(Collectors.toList()));
+  }
 }
