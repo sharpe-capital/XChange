@@ -283,4 +283,8 @@ public interface TradeService extends BaseService {
   default String updateOrder(Order order) throws IOException {
     throw new NotYetImplementedForExchangeException();
   }
+
+  default OpenOrders getFilledOrders() throws IOException {
+    throw new NotYetImplementedForExchangeException();
+  }
 }
