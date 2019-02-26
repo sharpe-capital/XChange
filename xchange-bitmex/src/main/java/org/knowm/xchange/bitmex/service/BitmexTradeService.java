@@ -183,7 +183,7 @@ public class BitmexTradeService extends BitmexTradeServiceRaw implements TradeSe
   @Override
   public Optional<Position> getPosition() {
     List<BitmexPosition> positions = getBitmexPositions();
-    // todo no position, empth optional is confusing - failed request or no position
+    // todo no position, empty optional is confusing - failed request or no position
     if (positions.size() > 0) {
       BitmexPosition position = positions.get(0);
 
@@ -210,18 +210,47 @@ public class BitmexTradeService extends BitmexTradeServiceRaw implements TradeSe
 
     return updateRateLimit(
         () -> bitmex.getPositions(apiKey, exchange.getNonceFactory(), signatureCreator));
-    //      List<BitmexPosition> positions = super.getBitmexPositions();
-    //
-    //      return positions;
   }
 
   @Override
   public OpenOrders getFilledOrders() {
-    // todo creat FilledOrders object
+    // todo create FilledOrders object
     List<BitmexPrivateOrder> bitmexOrders =
         getBitmexOrders(null, "{\"ordStatus\": \"Filled\"}", null, null, null);
 
     return new OpenOrders(
         bitmexOrders.stream().map(BitmexAdapters::adaptOrder).collect(Collectors.toList()));
+  }
+
+  @Override
+  public List<String> bulkPlaceOrders(List<LimitOrder> limitOrders) {
+    List<PlaceOrderCommand> placeOrderCommands = new ArrayList<>();
+
+    limitOrders.forEach(
+        order -> {
+          placeOrderCommands.add(orderToCommand(order));
+        });
+
+    List<String> orderIds = new ArrayList<>();
+    List<BitmexPrivateOrder> bitmexPrivateOrders = placeOrderBulk(placeOrderCommands);
+
+    bitmexPrivateOrders.forEach(
+        order -> {
+          orderIds.add(order.getClOrdID());
+        });
+
+    return orderIds;
+  }
+
+  private PlaceOrderCommand orderToCommand(LimitOrder order) {
+    String symbol = BitmexAdapters.adaptCurrencyPairToSymbol(order.getCurrencyPair());
+    BitmexPlaceOrderParameters bitmexPlaceOrderParameters =
+        new BitmexPlaceOrderParameters.Builder(symbol)
+            .setOrderQuantity(order.getOriginalAmount())
+            .setPrice(order.getLimitPrice())
+            .setSide(fromOrderType(order.getType()))
+            .build();
+
+    return new PlaceOrderCommand(bitmexPlaceOrderParameters);
   }
 }
