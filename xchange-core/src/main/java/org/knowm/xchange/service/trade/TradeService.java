@@ -320,7 +320,7 @@ public interface TradeService extends BaseService {
     throw new NotYetImplementedForExchangeException();
   }
 
-  default List<String> bulkPlaceOrders(List<LimitOrder> limitOrders) throws IOException {
+  default OpenOrders bulkPlaceOrders(List<LimitOrder> limitOrders) throws IOException {
     throw new NotYetImplementedForExchangeException();
   }
 }

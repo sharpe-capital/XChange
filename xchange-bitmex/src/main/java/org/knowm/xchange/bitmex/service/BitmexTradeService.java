@@ -223,7 +223,7 @@ public class BitmexTradeService extends BitmexTradeServiceRaw implements TradeSe
   }
 
   @Override
-  public List<String> bulkPlaceOrders(List<LimitOrder> limitOrders) {
+  public OpenOrders bulkPlaceOrders(List<LimitOrder> limitOrders) {
     List<PlaceOrderCommand> placeOrderCommands = new ArrayList<>();
 
     limitOrders.forEach(
@@ -231,15 +231,10 @@ public class BitmexTradeService extends BitmexTradeServiceRaw implements TradeSe
           placeOrderCommands.add(orderToCommand(order));
         });
 
-    List<String> orderIds = new ArrayList<>();
     List<BitmexPrivateOrder> bitmexPrivateOrders = placeOrderBulk(placeOrderCommands);
 
-    bitmexPrivateOrders.forEach(
-        order -> {
-          orderIds.add(order.getClOrdID());
-        });
-
-    return orderIds;
+    return new OpenOrders(
+        bitmexPrivateOrders.stream().map(BitmexAdapters::adaptOrder).collect(Collectors.toList()));
   }
 
   private PlaceOrderCommand orderToCommand(LimitOrder order) {
