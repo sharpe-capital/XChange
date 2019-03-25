@@ -6,11 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import org.knowm.xchange.dto.Order;
 import org.knowm.xchange.dto.Position;
-import org.knowm.xchange.dto.trade.LimitOrder;
-import org.knowm.xchange.dto.trade.MarketOrder;
-import org.knowm.xchange.dto.trade.OpenOrders;
-import org.knowm.xchange.dto.trade.StopOrder;
-import org.knowm.xchange.dto.trade.UserTrades;
+import org.knowm.xchange.dto.trade.*;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.exceptions.NotAvailableFromExchangeException;
 import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
@@ -316,7 +312,7 @@ public interface TradeService extends BaseService {
     throw new NotYetImplementedForExchangeException();
   }
 
-  default OpenOrders getFilledOrders() throws IOException {
+  default FilledOrders getFilledOrders() throws IOException {
     throw new NotYetImplementedForExchangeException();
   }
 
