@@ -212,7 +212,7 @@ public class KrakenTradeServiceRaw extends KrakenBaseService {
   public KrakenOrderResponse placeKrakenOrder(KrakenStandardOrder krakenStandardOrder)
       throws IOException {
 
-    KrakenOrderResult result = null;
+    KrakenOrderResult result;
     if (!krakenStandardOrder.isValidateOnly()) {
       result =
           kraken.addOrder(
