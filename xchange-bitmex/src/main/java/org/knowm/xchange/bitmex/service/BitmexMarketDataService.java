@@ -5,12 +5,10 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import org.knowm.xchange.bitmex.BitmexAdapters;
 import org.knowm.xchange.bitmex.BitmexExchange;
-import org.knowm.xchange.bitmex.BitmexPrompt;
+import java.util.stream.Collectors;
 import org.knowm.xchange.bitmex.dto.account.BitmexTicker;
 import org.knowm.xchange.bitmex.dto.marketdata.BitmexKline;
 import org.knowm.xchange.bitmex.dto.marketdata.BitmexPublicTrade;
@@ -32,6 +30,8 @@ import org.knowm.xchange.service.marketdata.MarketDataService;
 public class BitmexMarketDataService extends BitmexMarketDataServiceRaw
     implements MarketDataService {
 
+  private static final DateTimeFormatter KLINES_DATE_FORMATTER =
+      DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
   /**
    * Constructor
    *
@@ -107,26 +107,23 @@ public class BitmexMarketDataService extends BitmexMarketDataServiceRaw
 
   @Override
   public List<KLine> getKLines(CurrencyPair currencyPair, Object... args) throws IOException {
-    // todo get from args
-    String binSize = "1m";
-    boolean partial = false;
-    long count = 100;
-    boolean reverse = true;
+    String binSize = getFromArgs(0, String.class, args);
+    boolean partial = getFromArgs(1, Boolean.class, args);
+    long count = getFromArgs(3, Long.class, args);
+    boolean reverse = getFromArgs(4, Boolean.class, args);
 
     List<BitmexKline> bitmexKLines =
         getBucketedTrades(binSize, partial, currencyPair, count, reverse);
 
-    List<KLine> returnKlines = new ArrayList<>();
+    return bitmexKLines
+        .stream()
+        .map(
+            bitmexKLine -> {
+              LocalDateTime time =
+                  LocalDateTime.parse(bitmexKLine.getTimestamp(), KLINES_DATE_FORMATTER);
+              Long timestamp = time.atOffset(ZoneOffset.UTC).toInstant().toEpochMilli();
 
-    DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-
-    bitmexKLines.forEach(
-        bitmexKLine -> {
-          LocalDateTime time = parse(FORMAT, bitmexKLine.getTimestamp());
-          Long timestamp = time.atOffset(ZoneOffset.UTC).toInstant().toEpochMilli();
-
-          KLine kLine =
-              new KLine(
+              return new KLine(
                   timestamp,
                   bitmexKLine.getOpen(),
                   bitmexKLine.getHigh(),
@@ -134,15 +131,8 @@ public class BitmexMarketDataService extends BitmexMarketDataServiceRaw
                   bitmexKLine.getClose(),
                   BigDecimal.valueOf(bitmexKLine.getTurnover()),
                   bitmexKLine.getVolume(),
-                  null);
-
-          returnKlines.add(kLine);
-        });
-
-    return returnKlines;
-  }
-
-  public static LocalDateTime parse(DateTimeFormatter formatter, String date) {
-    return LocalDateTime.parse(date, formatter);
+                  bitmexKLine.getVwap());
+            })
+        .collect(Collectors.toList());
   }
 }
