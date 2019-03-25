@@ -11,6 +11,7 @@ public class KLine {
   private final BigDecimal close;
   private final BigDecimal amount;
   private final BigDecimal volume;
+  private final BigDecimal vwap;
 
   public KLine(
       Long timestamp,
@@ -19,7 +20,8 @@ public class KLine {
       BigDecimal low,
       BigDecimal close,
       BigDecimal amount,
-      BigDecimal volume) {
+      BigDecimal volume,
+      BigDecimal vwap) {
     this.timestamp = timestamp;
     this.open = open;
     this.high = high;
@@ -27,6 +29,7 @@ public class KLine {
     this.close = close;
     this.amount = amount;
     this.volume = volume;
+    this.vwap = vwap;
   }
 
   public Long getTimestamp() {
@@ -55,5 +58,9 @@ public class KLine {
 
   public BigDecimal getVolume() {
     return volume;
+  }
+
+  public BigDecimal getVwap() {
+    return vwap;
   }
 }

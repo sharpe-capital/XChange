@@ -108,4 +108,15 @@ public interface MarketDataService extends BaseService {
   default List<KLine> getKLines(CurrencyPair currencyPair, Object... args) throws IOException {
     throw new NotYetImplementedForExchangeException();
   }
+
+  default <T> T getFromArgs(int index, Class<T> clazz, Object... args) {
+    if (args.length - 1 < index) {
+      return null;
+    }
+    Object atIndex = args[index];
+    if (atIndex != null && clazz.isAssignableFrom(atIndex.getClass())) {
+      return clazz.cast(atIndex);
+    }
+    return null;
+  }
 }

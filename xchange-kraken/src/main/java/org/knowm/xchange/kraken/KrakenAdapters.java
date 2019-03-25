@@ -21,10 +21,7 @@ import org.knowm.xchange.dto.account.Balance;
 import org.knowm.xchange.dto.account.Fee;
 import org.knowm.xchange.dto.account.FundingRecord;
 import org.knowm.xchange.dto.account.Wallet;
-import org.knowm.xchange.dto.marketdata.OrderBook;
-import org.knowm.xchange.dto.marketdata.Ticker;
-import org.knowm.xchange.dto.marketdata.Trade;
-import org.knowm.xchange.dto.marketdata.Trades;
+import org.knowm.xchange.dto.marketdata.*;
 import org.knowm.xchange.dto.marketdata.Trades.TradeSortType;
 import org.knowm.xchange.dto.meta.CurrencyMetaData;
 import org.knowm.xchange.dto.meta.CurrencyPairMetaData;
@@ -38,13 +35,7 @@ import org.knowm.xchange.dto.trade.UserTrades;
 import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
 import org.knowm.xchange.kraken.dto.account.KrakenDepositAddress;
 import org.knowm.xchange.kraken.dto.account.KrakenLedger;
-import org.knowm.xchange.kraken.dto.marketdata.KrakenAsset;
-import org.knowm.xchange.kraken.dto.marketdata.KrakenAssetPair;
-import org.knowm.xchange.kraken.dto.marketdata.KrakenDepth;
-import org.knowm.xchange.kraken.dto.marketdata.KrakenFee;
-import org.knowm.xchange.kraken.dto.marketdata.KrakenPublicOrder;
-import org.knowm.xchange.kraken.dto.marketdata.KrakenPublicTrade;
-import org.knowm.xchange.kraken.dto.marketdata.KrakenTicker;
+import org.knowm.xchange.kraken.dto.marketdata.*;
 import org.knowm.xchange.kraken.dto.trade.KrakenOrder;
 import org.knowm.xchange.kraken.dto.trade.KrakenOrderDescription;
 import org.knowm.xchange.kraken.dto.trade.KrakenOrderResponse;
@@ -446,6 +437,24 @@ public class KrakenAdapters {
       }
     }
     return fundingRecords;
+  }
+
+  public static List<KLine> adaptOHLC(KrakenOHLCs krakenOHLCs) {
+    return krakenOHLCs
+        .getOHLCs()
+        .stream()
+        .map(
+            ohlc ->
+                new KLine(
+                    ohlc.getTime(),
+                    ohlc.getOpen(),
+                    ohlc.getHigh(),
+                    ohlc.getLow(),
+                    ohlc.getClose(),
+                    BigDecimal.valueOf(ohlc.getCount()),
+                    ohlc.getVolume(),
+                    ohlc.getVwap()))
+        .collect(Collectors.toList());
   }
 
   public static OrderStatus adaptOrderStatus(KrakenOrderStatus status) {

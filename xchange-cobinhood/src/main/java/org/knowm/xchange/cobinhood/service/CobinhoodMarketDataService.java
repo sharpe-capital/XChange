@@ -100,15 +100,4 @@ public class CobinhoodMarketDataService extends CobinhoodMarketDataServiceRaw
     return KucoinAdapters.adaptKLines(
         getKucoinKLines(currencyPair, commaSeparatedTypes, from, to, limit).getData());
   }
-
-  private <T> T getFromArgs(int index, Class<T> clazz, Object... args) {
-    if (args.length - 1 < index) {
-      return null;
-    }
-    Object atIndex = args[index];
-    if (atIndex != null && clazz.isAssignableFrom(atIndex.getClass())) {
-      return clazz.cast(atIndex);
-    }
-    return null;
-  }
 }

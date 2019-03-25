@@ -133,7 +133,8 @@ public class BitmexMarketDataService extends BitmexMarketDataServiceRaw
                   bitmexKLine.getLow(),
                   bitmexKLine.getClose(),
                   BigDecimal.valueOf(bitmexKLine.getTurnover()),
-                  bitmexKLine.getVolume());
+                  bitmexKLine.getVolume(),
+                  null);
 
           returnKlines.add(kLine);
         });
