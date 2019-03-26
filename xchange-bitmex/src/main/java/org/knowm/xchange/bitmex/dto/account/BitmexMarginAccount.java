@@ -347,4 +347,168 @@ public final class BitmexMarginAccount extends AbstractHttpResponseAware {
   public Map<String, Object> getAdditionalProperties() {
     return additionalProperties;
   }
+
+  public void setAccount(Integer account) {
+    this.account = account;
+  }
+
+  public void setCurrency(String currency) {
+    this.currency = currency;
+  }
+
+  public void setRiskLimit(BigDecimal riskLimit) {
+    this.riskLimit = riskLimit;
+  }
+
+  public void setPrevState(String prevState) {
+    this.prevState = prevState;
+  }
+
+  public void setState(String state) {
+    this.state = state;
+  }
+
+  public void setAction(String action) {
+    this.action = action;
+  }
+
+  public void setAmount(BigDecimal amount) {
+    this.amount = amount;
+  }
+
+  public void setPendingCredit(BigDecimal pendingCredit) {
+    this.pendingCredit = pendingCredit;
+  }
+
+  public void setPendingDebit(BigDecimal pendingDebit) {
+    this.pendingDebit = pendingDebit;
+  }
+
+  public void setConfirmedDebit(BigDecimal confirmedDebit) {
+    this.confirmedDebit = confirmedDebit;
+  }
+
+  public void setPrevRealisedPnl(BigDecimal prevRealisedPnl) {
+    this.prevRealisedPnl = prevRealisedPnl;
+  }
+
+  public void setPrevUnrealisedPnl(BigDecimal prevUnrealisedPnl) {
+    this.prevUnrealisedPnl = prevUnrealisedPnl;
+  }
+
+  public void setGrossComm(BigDecimal grossComm) {
+    this.grossComm = grossComm;
+  }
+
+  public void setGrossOpenCost(BigDecimal grossOpenCost) {
+    this.grossOpenCost = grossOpenCost;
+  }
+
+  public void setGrossOpenPremium(BigDecimal grossOpenPremium) {
+    this.grossOpenPremium = grossOpenPremium;
+  }
+
+  public void setGrossExecCost(BigDecimal grossExecCost) {
+    this.grossExecCost = grossExecCost;
+  }
+
+  public void setGrossMarkValue(BigDecimal grossMarkValue) {
+    this.grossMarkValue = grossMarkValue;
+  }
+
+  public void setRiskValue(BigDecimal riskValue) {
+    this.riskValue = riskValue;
+  }
+
+  public void setTaxableMargin(BigDecimal taxableMargin) {
+    this.taxableMargin = taxableMargin;
+  }
+
+  public void setInitMargin(BigDecimal initMargin) {
+    this.initMargin = initMargin;
+  }
+
+  public void setMaintMargin(BigDecimal maintMargin) {
+    this.maintMargin = maintMargin;
+  }
+
+  public void setSessionMargin(BigDecimal sessionMargin) {
+    this.sessionMargin = sessionMargin;
+  }
+
+  public void setTargetExcessMargin(BigDecimal targetExcessMargin) {
+    this.targetExcessMargin = targetExcessMargin;
+  }
+
+  public void setVarMargin(BigDecimal varMargin) {
+    this.varMargin = varMargin;
+  }
+
+  public void setRealisedPnl(BigDecimal realisedPnl) {
+    this.realisedPnl = realisedPnl;
+  }
+
+  public void setUnrealisedPnl(BigDecimal unrealisedPnl) {
+    this.unrealisedPnl = unrealisedPnl;
+  }
+
+  public void setIndicativeTax(BigDecimal indicativeTax) {
+    this.indicativeTax = indicativeTax;
+  }
+
+  public void setUnrealisedProfit(BigDecimal unrealisedProfit) {
+    this.unrealisedProfit = unrealisedProfit;
+  }
+
+  public void setSyntheticMargin(BigDecimal syntheticMargin) {
+    this.syntheticMargin = syntheticMargin;
+  }
+
+  public void setWalletBalance(BigDecimal walletBalance) {
+    this.walletBalance = walletBalance;
+  }
+
+  public void setMarginBalance(BigDecimal marginBalance) {
+    this.marginBalance = marginBalance;
+  }
+
+  public void setMarginBalancePcnt(BigDecimal marginBalancePcnt) {
+    this.marginBalancePcnt = marginBalancePcnt;
+  }
+
+  public void setMarginLeverage(BigDecimal marginLeverage) {
+    this.marginLeverage = marginLeverage;
+  }
+
+  public void setMarginUsedPcnt(BigDecimal marginUsedPcnt) {
+    this.marginUsedPcnt = marginUsedPcnt;
+  }
+
+  public void setExcessMargin(BigDecimal excessMargin) {
+    this.excessMargin = excessMargin;
+  }
+
+  public void setExcessMarginPcnt(BigDecimal excessMarginPcnt) {
+    this.excessMarginPcnt = excessMarginPcnt;
+  }
+
+  public void setAvailableMargin(BigDecimal availableMargin) {
+    this.availableMargin = availableMargin;
+  }
+
+  public void setWithdrawableMargin(BigDecimal withdrawableMargin) {
+    this.withdrawableMargin = withdrawableMargin;
+  }
+
+  public void setTimestamp(String timestamp) {
+    this.timestamp = timestamp;
+  }
+
+  public void setGrossLastValue(BigDecimal grossLastValue) {
+    this.grossLastValue = grossLastValue;
+  }
+
+  public void setCommission(BigDecimal commission) {
+    this.commission = commission;
+  }
 }

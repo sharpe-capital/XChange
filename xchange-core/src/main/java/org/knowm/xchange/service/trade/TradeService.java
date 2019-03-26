@@ -2,7 +2,10 @@ package org.knowm.xchange.service.trade;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import org.knowm.xchange.dto.Order;
+import org.knowm.xchange.dto.Position;
 import org.knowm.xchange.dto.trade.LimitOrder;
 import org.knowm.xchange.dto.trade.MarketOrder;
 import org.knowm.xchange.dto.trade.OpenOrders;
@@ -272,5 +275,21 @@ public interface TradeService extends BaseService {
    */
   default Collection<Order> getOrder(OrderQueryParams... orderQueryParams) throws IOException {
     throw new NotAvailableFromExchangeException();
+  }
+
+  default Optional<Position> getPosition() throws IOException {
+    throw new NotYetImplementedForExchangeException();
+  }
+
+  default String updateOrder(Order order) throws IOException {
+    throw new NotYetImplementedForExchangeException();
+  }
+
+  default OpenOrders getFilledOrders() throws IOException {
+    throw new NotYetImplementedForExchangeException();
+  }
+
+  default OpenOrders bulkPlaceOrders(List<LimitOrder> limitOrders) throws IOException {
+    throw new NotYetImplementedForExchangeException();
   }
 }

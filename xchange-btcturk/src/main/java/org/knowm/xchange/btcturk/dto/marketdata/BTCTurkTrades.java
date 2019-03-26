@@ -3,8 +3,10 @@ package org.knowm.xchange.btcturk.dto.marketdata;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.math.BigDecimal;
 
-/** @author semihunaldi 
- * @author  mertguner */
+/**
+ * @author semihunaldi
+ * @author mertguner
+ */
 public final class BTCTurkTrades {
 
   private final long date;
@@ -47,10 +49,16 @@ public final class BTCTurkTrades {
     return amount;
   }
 
-@Override
-public String toString() {
-	return "BTCTurkTrades [date=" + date + ", tid=" + tid + ", price=" + price + ", amount=" + amount + "]";
-}
-
-  
+  @Override
+  public String toString() {
+    return "BTCTurkTrades [date="
+        + date
+        + ", tid="
+        + tid
+        + ", price="
+        + price
+        + ", amount="
+        + amount
+        + "]";
+  }
 }

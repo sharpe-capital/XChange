@@ -2,6 +2,10 @@ package org.knowm.xchange.bitmex.service;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.knowm.xchange.bitmex.BitmexAdapters;
@@ -10,8 +14,10 @@ import org.knowm.xchange.bitmex.BitmexExchange;
 import org.knowm.xchange.bitmex.BitmexPrompt;
 import org.knowm.xchange.bitmex.BitmexUtils;
 import org.knowm.xchange.bitmex.dto.account.BitmexTicker;
+import org.knowm.xchange.bitmex.dto.marketdata.BitmexKline;
 import org.knowm.xchange.bitmex.dto.marketdata.BitmexPublicTrade;
 import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.marketdata.KLine;
 import org.knowm.xchange.dto.marketdata.OrderBook;
 import org.knowm.xchange.dto.marketdata.Ticker;
 import org.knowm.xchange.dto.marketdata.Trades;
@@ -118,5 +124,46 @@ public class BitmexMarketDataService extends BitmexMarketDataServiceRaw
     String bitmexSymbol = BitmexUtils.translateBitmexContract(contract);
     List<BitmexPublicTrade> trades = getBitmexTrades(bitmexSymbol, limit, start);
     return BitmexAdapters.adaptTrades(trades, currencyPair);
+  }
+
+  @Override
+  public List<KLine> getKLines(CurrencyPair currencyPair, Object... args) throws IOException {
+    // todo get from args
+    String binSize = "1m";
+    boolean partial = false;
+    BitmexPrompt bitmexPrompt = BitmexPrompt.PERPETUAL;
+    long count = 100;
+    boolean reverse = true;
+
+    List<BitmexKline> bitmexKLines =
+        getBucketedTrades(binSize, partial, currencyPair, bitmexPrompt, count, reverse);
+
+    List<KLine> returnKlines = new ArrayList<>();
+
+    DateTimeFormatter FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+
+    bitmexKLines.forEach(
+        bitmexKLine -> {
+          LocalDateTime time = parse(FORMAT, bitmexKLine.getTimestamp());
+          Long timestamp = time.atOffset(ZoneOffset.UTC).toInstant().toEpochMilli();
+
+          KLine kLine =
+              new KLine(
+                  timestamp,
+                  bitmexKLine.getOpen(),
+                  bitmexKLine.getHigh(),
+                  bitmexKLine.getLow(),
+                  bitmexKLine.getClose(),
+                  BigDecimal.valueOf(bitmexKLine.getTurnover()),
+                  bitmexKLine.getVolume());
+
+          returnKlines.add(kLine);
+        });
+
+    return returnKlines;
+  }
+
+  public static LocalDateTime parse(DateTimeFormatter formatter, String date) {
+    return LocalDateTime.parse(date, formatter);
   }
 }

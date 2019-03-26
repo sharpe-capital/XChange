@@ -3,20 +3,15 @@ package org.knowm.xchange.bitmex.service;
 import static org.knowm.xchange.bitmex.dto.trade.BitmexSide.fromOrderType;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import org.knowm.xchange.bitmex.BitmexAdapters;
 import org.knowm.xchange.bitmex.BitmexExchange;
 import org.knowm.xchange.bitmex.dto.marketdata.BitmexPrivateOrder;
-import org.knowm.xchange.bitmex.dto.trade.BitmexExecutionInstruction;
-import org.knowm.xchange.bitmex.dto.trade.BitmexOrderFlags;
-import org.knowm.xchange.bitmex.dto.trade.BitmexPlaceOrderParameters;
+import org.knowm.xchange.bitmex.dto.trade.*;
 import org.knowm.xchange.bitmex.dto.trade.BitmexPlaceOrderParameters.Builder;
 import org.knowm.xchange.dto.Order;
+import org.knowm.xchange.dto.Position;
 import org.knowm.xchange.dto.marketdata.Trades.TradeSortType;
 import org.knowm.xchange.dto.trade.LimitOrder;
 import org.knowm.xchange.dto.trade.MarketOrder;
@@ -170,5 +165,74 @@ public class BitmexTradeService extends BitmexTradeServiceRaw implements TradeSe
             .filter(Objects::nonNull)
             .collect(Collectors.toList());
     return new UserTrades(userTrades, TradeSortType.SortByTimestamp);
+  }
+
+  @Override
+  public Optional<Position> getPosition() {
+    List<BitmexPosition> positions = getBitmexPositions();
+    // todo no position, empty optional is confusing - failed request or no position
+    if (positions.size() > 0) {
+      BitmexPosition position = positions.get(0);
+
+      return Optional.of(new Position(position.getCurrentQty(), position.getAvgEntryPrice()));
+    }
+
+    return Optional.empty();
+  }
+
+  @Override
+  public String updateOrder(Order order) {
+    // todo implement other order requirements
+    org.knowm.xchange.bitmex.dto.trade.BitmexReplaceOrderParameters.Builder replaceOrderParameters =
+        new BitmexReplaceOrderParameters.Builder()
+            .setOrderId(order.getId())
+            .setOrderQuantity(order.getOriginalAmount())
+            .setPrice(order.getAveragePrice());
+    return replaceOrder(replaceOrderParameters.build()).getId();
+  }
+
+  @Override
+  public List<BitmexPosition> getBitmexPositions() throws ExchangeException {
+    String apiKey = exchange.getExchangeSpecification().getApiKey();
+
+    return updateRateLimit(
+        () -> bitmex.getPositions(apiKey, exchange.getNonceFactory(), signatureCreator));
+  }
+
+  @Override
+  public OpenOrders getFilledOrders() {
+    // todo create FilledOrders object
+    List<BitmexPrivateOrder> bitmexOrders =
+        getBitmexOrders(null, "{\"ordStatus\": \"Filled\"}", null, null, null);
+
+    return new OpenOrders(
+        bitmexOrders.stream().map(BitmexAdapters::adaptOrder).collect(Collectors.toList()));
+  }
+
+  @Override
+  public OpenOrders bulkPlaceOrders(List<LimitOrder> limitOrders) {
+    List<PlaceOrderCommand> placeOrderCommands = new ArrayList<>();
+
+    limitOrders.forEach(
+        order -> {
+          placeOrderCommands.add(orderToCommand(order));
+        });
+
+    List<BitmexPrivateOrder> bitmexPrivateOrders = placeOrderBulk(placeOrderCommands);
+
+    return new OpenOrders(
+        bitmexPrivateOrders.stream().map(BitmexAdapters::adaptOrder).collect(Collectors.toList()));
+  }
+
+  private PlaceOrderCommand orderToCommand(LimitOrder order) {
+    String symbol = BitmexAdapters.adaptCurrencyPairToSymbol(order.getCurrencyPair());
+    BitmexPlaceOrderParameters bitmexPlaceOrderParameters =
+        new BitmexPlaceOrderParameters.Builder(symbol)
+            .setOrderQuantity(order.getOriginalAmount())
+            .setPrice(order.getLimitPrice())
+            .setSide(fromOrderType(order.getType()))
+            .build();
+
+    return new PlaceOrderCommand(bitmexPlaceOrderParameters);
   }
 }
