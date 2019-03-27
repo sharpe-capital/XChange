@@ -429,9 +429,7 @@ public class KrakenAdapters {
   }
 
   public static List<KLine> adaptOHLC(KrakenOHLCs krakenOHLCs) {
-    return krakenOHLCs
-        .getOHLCs()
-        .stream()
+    return krakenOHLCs.getOHLCs().stream()
         .map(
             ohlc ->
                 new KLine(

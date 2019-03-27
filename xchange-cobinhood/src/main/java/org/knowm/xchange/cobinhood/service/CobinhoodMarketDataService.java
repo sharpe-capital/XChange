@@ -2,7 +2,6 @@ package org.knowm.xchange.cobinhood.service;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.knowm.xchange.Exchange;
@@ -10,7 +9,6 @@ import org.knowm.xchange.cobinhood.CobinhoodAdapters;
 import org.knowm.xchange.cobinhood.dto.CobinhoodResponse;
 import org.knowm.xchange.cobinhood.dto.marketdata.CobinhoodTrades;
 import org.knowm.xchange.currency.CurrencyPair;
-import org.knowm.xchange.dto.marketdata.KLine;
 import org.knowm.xchange.dto.marketdata.OrderBook;
 import org.knowm.xchange.dto.marketdata.Ticker;
 import org.knowm.xchange.dto.marketdata.Trade;
@@ -80,24 +78,5 @@ public class CobinhoodMarketDataService extends CobinhoodMarketDataServiceRaw
             .map(trade -> CobinhoodAdapters.adaptTrade(trade, currencyPair))
             .collect(Collectors.toList());
     return new Trades(trades, Trades.TradeSortType.SortByTimestamp);
-  }
-
-  @Override
-  public List<KLine> getKLines(CurrencyPair currencyPair, Object... args) throws IOException {
-
-    String[] type = getFromArgs(0, String[].class, args);
-    Long from = getFromArgs(1, Long.class, args);
-    Long to = getFromArgs(2, Long.class, args);
-    Integer limit = getFromArgs(3, Integer.class, args);
-
-    if (type == null || from == null || to == null) {
-      throw new IllegalArgumentException(
-          "Can't get KLines with these args. None of type, from or to can be null!");
-    }
-
-    String commaSeparatedTypes = String.join(",", Arrays.asList(type));
-
-    return KucoinAdapters.adaptKLines(
-        getKucoinKLines(currencyPair, commaSeparatedTypes, from, to, limit).getData());
   }
 }

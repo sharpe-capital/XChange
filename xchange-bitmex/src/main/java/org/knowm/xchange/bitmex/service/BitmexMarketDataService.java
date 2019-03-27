@@ -6,9 +6,9 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.knowm.xchange.bitmex.BitmexAdapters;
 import org.knowm.xchange.bitmex.BitmexExchange;
-import java.util.stream.Collectors;
 import org.knowm.xchange.bitmex.dto.account.BitmexTicker;
 import org.knowm.xchange.bitmex.dto.marketdata.BitmexKline;
 import org.knowm.xchange.bitmex.dto.marketdata.BitmexPublicTrade;
@@ -115,8 +115,7 @@ public class BitmexMarketDataService extends BitmexMarketDataServiceRaw
     List<BitmexKline> bitmexKLines =
         getBucketedTrades(binSize, partial, currencyPair, count, reverse);
 
-    return bitmexKLines
-        .stream()
+    return bitmexKLines.stream()
         .map(
             bitmexKLine -> {
               LocalDateTime time =
