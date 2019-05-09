@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import org.knowm.xchange.Exchange;
 import org.knowm.xchange.currency.CurrencyPair;
+import org.knowm.xchange.dto.marketdata.KLine;
 import org.knowm.xchange.dto.marketdata.OrderBook;
 import org.knowm.xchange.dto.marketdata.Ticker;
 import org.knowm.xchange.dto.marketdata.Trades;
@@ -83,5 +84,15 @@ public class KrakenMarketDataService extends KrakenMarketDataServiceRaw
     KrakenPublicTrades krakenTrades = getKrakenTrades(currencyPair, since);
     return KrakenAdapters.adaptTrades(
         krakenTrades.getTrades(), currencyPair, krakenTrades.getLast());
+  }
+
+  @Override
+  public List<KLine> getKLines(CurrencyPair currencyPair, Object... args) throws IOException {
+    Integer interval = getFromArgs(0, Integer.class, args);
+    Long since = getFromArgs(1, Long.class, args);
+    return KrakenAdapters.adaptOHLC(
+        kraken
+            .getOHLC(delimitAssetPairs(new CurrencyPair[] {currencyPair}), interval, since)
+            .getResult());
   }
 }

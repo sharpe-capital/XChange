@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import org.knowm.xchange.bitmex.AbstractHttpResponseAware;
 
 public class BitmexPosition extends AbstractHttpResponseAware {
+
   @JsonProperty("account")
   private Integer account;
 
@@ -836,5 +837,370 @@ public class BitmexPosition extends AbstractHttpResponseAware {
         + ", lastValue="
         + lastValue
         + '}';
+  }
+
+  public void setSymbol(String symbol) {
+    this.symbol = symbol;
+  }
+
+  public void setCurrency(String currency) {
+    this.currency = currency;
+  }
+
+  public void setUnderlying(String underlying) {
+    this.underlying = underlying;
+  }
+
+  public void setQuoteCurrency(String quoteCurrency) {
+    this.quoteCurrency = quoteCurrency;
+  }
+
+  public void setCommission(BigDecimal commission) {
+    this.commission = commission;
+  }
+
+  public void setInitMarginReq(BigDecimal initMarginReq) {
+    this.initMarginReq = initMarginReq;
+  }
+
+  public void setMaintMarginReq(BigDecimal maintMarginReq) {
+    this.maintMarginReq = maintMarginReq;
+  }
+
+  public void setRiskLimit(BigDecimal riskLimit) {
+    this.riskLimit = riskLimit;
+  }
+
+  public void setLeverage(BigDecimal leverage) {
+    this.leverage = leverage;
+  }
+
+  public void setCrossMargin(Boolean crossMargin) {
+    this.crossMargin = crossMargin;
+  }
+
+  public void setDeleveragePercentile(BigDecimal deleveragePercentile) {
+    this.deleveragePercentile = deleveragePercentile;
+  }
+
+  public void setRebalancedPnl(BigDecimal rebalancedPnl) {
+    this.rebalancedPnl = rebalancedPnl;
+  }
+
+  public void setPrevRealisedPnl(BigDecimal prevRealisedPnl) {
+    this.prevRealisedPnl = prevRealisedPnl;
+  }
+
+  public void setPrevUnrealisedPnl(BigDecimal prevUnrealisedPnl) {
+    this.prevUnrealisedPnl = prevUnrealisedPnl;
+  }
+
+  public void setPrevClosePrice(BigDecimal prevClosePrice) {
+    this.prevClosePrice = prevClosePrice;
+  }
+
+  public void setOpeningTimestamp(String openingTimestamp) {
+    this.openingTimestamp = openingTimestamp;
+  }
+
+  public void setOpeningQty(BigDecimal openingQty) {
+    this.openingQty = openingQty;
+  }
+
+  public void setOpeningCost(BigDecimal openingCost) {
+    this.openingCost = openingCost;
+  }
+
+  public void setOpeningComm(BigDecimal openingComm) {
+    this.openingComm = openingComm;
+  }
+
+  public void setOpenOrderBuyQty(BigDecimal openOrderBuyQty) {
+    this.openOrderBuyQty = openOrderBuyQty;
+  }
+
+  public void setOpenOrderBuyCost(BigDecimal openOrderBuyCost) {
+    this.openOrderBuyCost = openOrderBuyCost;
+  }
+
+  public void setOpenOrderBuyPremium(BigDecimal openOrderBuyPremium) {
+    this.openOrderBuyPremium = openOrderBuyPremium;
+  }
+
+  public void setOpenOrderSellQty(BigDecimal openOrderSellQty) {
+    this.openOrderSellQty = openOrderSellQty;
+  }
+
+  public void setOpenOrderSellCost(BigDecimal openOrderSellCost) {
+    this.openOrderSellCost = openOrderSellCost;
+  }
+
+  public void setOpenOrderSellPremium(BigDecimal openOrderSellPremium) {
+    this.openOrderSellPremium = openOrderSellPremium;
+  }
+
+  public void setExecBuyQty(BigDecimal execBuyQty) {
+    this.execBuyQty = execBuyQty;
+  }
+
+  public void setExecBuyCost(BigDecimal execBuyCost) {
+    this.execBuyCost = execBuyCost;
+  }
+
+  public void setExecSellQty(BigDecimal execSellQty) {
+    this.execSellQty = execSellQty;
+  }
+
+  public void setExecSellCost(BigDecimal execSellCost) {
+    this.execSellCost = execSellCost;
+  }
+
+  public void setExecQty(BigDecimal execQty) {
+    this.execQty = execQty;
+  }
+
+  public void setExecCost(BigDecimal execCost) {
+    this.execCost = execCost;
+  }
+
+  public void setExecComm(BigDecimal execComm) {
+    this.execComm = execComm;
+  }
+
+  public void setCurrentTimestamp(String currentTimestamp) {
+    this.currentTimestamp = currentTimestamp;
+  }
+
+  public void setCurrentQty(BigDecimal currentQty) {
+    this.currentQty = currentQty;
+  }
+
+  public void setCurrentCost(BigDecimal currentCost) {
+    this.currentCost = currentCost;
+  }
+
+  public void setCurrentComm(BigDecimal currentComm) {
+    this.currentComm = currentComm;
+  }
+
+  public void setRealisedCost(BigDecimal realisedCost) {
+    this.realisedCost = realisedCost;
+  }
+
+  public void setUnrealisedCost(BigDecimal unrealisedCost) {
+    this.unrealisedCost = unrealisedCost;
+  }
+
+  public void setGrossOpenCost(BigDecimal grossOpenCost) {
+    this.grossOpenCost = grossOpenCost;
+  }
+
+  public void setGrossOpenPremium(BigDecimal grossOpenPremium) {
+    this.grossOpenPremium = grossOpenPremium;
+  }
+
+  public void setGrossExecCost(BigDecimal grossExecCost) {
+    this.grossExecCost = grossExecCost;
+  }
+
+  public void setOpen(Boolean open) {
+    isOpen = open;
+  }
+
+  public void setMarkPrice(BigDecimal markPrice) {
+    this.markPrice = markPrice;
+  }
+
+  public void setMarkValue(BigDecimal markValue) {
+    this.markValue = markValue;
+  }
+
+  public void setRiskValue(BigDecimal riskValue) {
+    this.riskValue = riskValue;
+  }
+
+  public void setHomeNotional(BigDecimal homeNotional) {
+    this.homeNotional = homeNotional;
+  }
+
+  public void setForeignNotional(BigDecimal foreignNotional) {
+    this.foreignNotional = foreignNotional;
+  }
+
+  public void setPosState(String posState) {
+    this.posState = posState;
+  }
+
+  public void setPosCost(BigDecimal posCost) {
+    this.posCost = posCost;
+  }
+
+  public void setPosCost2(BigDecimal posCost2) {
+    this.posCost2 = posCost2;
+  }
+
+  public void setPosCross(BigDecimal posCross) {
+    this.posCross = posCross;
+  }
+
+  public void setPosInit(BigDecimal posInit) {
+    this.posInit = posInit;
+  }
+
+  public void setPosComm(BigDecimal posComm) {
+    this.posComm = posComm;
+  }
+
+  public void setPosLoss(BigDecimal posLoss) {
+    this.posLoss = posLoss;
+  }
+
+  public void setPosMargin(BigDecimal posMargin) {
+    this.posMargin = posMargin;
+  }
+
+  public void setPosMaint(BigDecimal posMaint) {
+    this.posMaint = posMaint;
+  }
+
+  public void setPosAllowance(BigDecimal posAllowance) {
+    this.posAllowance = posAllowance;
+  }
+
+  public void setTaxableMargin(BigDecimal taxableMargin) {
+    this.taxableMargin = taxableMargin;
+  }
+
+  public void setInitMargin(BigDecimal initMargin) {
+    this.initMargin = initMargin;
+  }
+
+  public void setMaintMargin(BigDecimal maintMargin) {
+    this.maintMargin = maintMargin;
+  }
+
+  public void setSessionMargin(BigDecimal sessionMargin) {
+    this.sessionMargin = sessionMargin;
+  }
+
+  public void setTargetExcessMargin(BigDecimal targetExcessMargin) {
+    this.targetExcessMargin = targetExcessMargin;
+  }
+
+  public void setVarMargin(BigDecimal varMargin) {
+    this.varMargin = varMargin;
+  }
+
+  public void setRealisedGrossPnl(BigDecimal realisedGrossPnl) {
+    this.realisedGrossPnl = realisedGrossPnl;
+  }
+
+  public void setRealisedTax(BigDecimal realisedTax) {
+    this.realisedTax = realisedTax;
+  }
+
+  public void setRealisedPnl(BigDecimal realisedPnl) {
+    this.realisedPnl = realisedPnl;
+  }
+
+  public void setUnrealisedGrossPnl(BigDecimal unrealisedGrossPnl) {
+    this.unrealisedGrossPnl = unrealisedGrossPnl;
+  }
+
+  public void setLongBankrupt(BigDecimal longBankrupt) {
+    this.longBankrupt = longBankrupt;
+  }
+
+  public void setShortBankrupt(BigDecimal shortBankrupt) {
+    this.shortBankrupt = shortBankrupt;
+  }
+
+  public void setTaxBase(BigDecimal taxBase) {
+    this.taxBase = taxBase;
+  }
+
+  public void setIndicativeTaxRate(BigDecimal indicativeTaxRate) {
+    this.indicativeTaxRate = indicativeTaxRate;
+  }
+
+  public void setIndicativeTax(BigDecimal indicativeTax) {
+    this.indicativeTax = indicativeTax;
+  }
+
+  public void setUnrealisedTax(BigDecimal unrealisedTax) {
+    this.unrealisedTax = unrealisedTax;
+  }
+
+  public void setUnrealisedPnl(BigDecimal unrealisedPnl) {
+    this.unrealisedPnl = unrealisedPnl;
+  }
+
+  public void setUnrealisedPnlPcnt(BigDecimal unrealisedPnlPcnt) {
+    this.unrealisedPnlPcnt = unrealisedPnlPcnt;
+  }
+
+  public void setUnrealisedRoePcnt(BigDecimal unrealisedRoePcnt) {
+    this.unrealisedRoePcnt = unrealisedRoePcnt;
+  }
+
+  public void setSimpleQty(BigDecimal simpleQty) {
+    this.simpleQty = simpleQty;
+  }
+
+  public void setSimpleCost(BigDecimal simpleCost) {
+    this.simpleCost = simpleCost;
+  }
+
+  public void setSimpleValue(BigDecimal simpleValue) {
+    this.simpleValue = simpleValue;
+  }
+
+  public void setSimplePnl(BigDecimal simplePnl) {
+    this.simplePnl = simplePnl;
+  }
+
+  public void setSimplePnlPcnt(BigDecimal simplePnlPcnt) {
+    this.simplePnlPcnt = simplePnlPcnt;
+  }
+
+  public void setAvgCostPrice(BigDecimal avgCostPrice) {
+    this.avgCostPrice = avgCostPrice;
+  }
+
+  public void setAvgEntryPrice(BigDecimal avgEntryPrice) {
+    this.avgEntryPrice = avgEntryPrice;
+  }
+
+  public void setBreakEvenPrice(BigDecimal breakEvenPrice) {
+    this.breakEvenPrice = breakEvenPrice;
+  }
+
+  public void setMarginCallPrice(BigDecimal marginCallPrice) {
+    this.marginCallPrice = marginCallPrice;
+  }
+
+  public void setLiquidationPrice(BigDecimal liquidationPrice) {
+    this.liquidationPrice = liquidationPrice;
+  }
+
+  public void setBankruptPrice(BigDecimal bankruptPrice) {
+    this.bankruptPrice = bankruptPrice;
+  }
+
+  public void setTimestamp(String timestamp) {
+    this.timestamp = timestamp;
+  }
+
+  public void setLastPrice(BigDecimal lastPrice) {
+    this.lastPrice = lastPrice;
+  }
+
+  public void setLastValue(BigDecimal lastValue) {
+    this.lastValue = lastValue;
+  }
+
+  public void setAccount(Integer account) {
+
+    this.account = account;
   }
 }

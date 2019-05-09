@@ -63,7 +63,7 @@ public class BitmexAccountServiceRaw extends BitmexBaseService {
     return updateRateLimit(
         () ->
             bitmex.getMarginAccountStatus(
-                apiKey, exchange.getNonceFactory(), signatureCreator, ccy.getCurrencyCode()));
+                apiKey, exchange.getNonceFactory(), signatureCreator, "XBt"));
   }
 
   public List<BitmexMarginAccount> getBitmexMarginAccountsStatus() throws ExchangeException {

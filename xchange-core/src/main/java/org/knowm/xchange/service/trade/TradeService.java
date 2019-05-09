@@ -2,12 +2,11 @@ package org.knowm.xchange.service.trade;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 import org.knowm.xchange.dto.Order;
-import org.knowm.xchange.dto.trade.LimitOrder;
-import org.knowm.xchange.dto.trade.MarketOrder;
-import org.knowm.xchange.dto.trade.OpenOrders;
-import org.knowm.xchange.dto.trade.StopOrder;
-import org.knowm.xchange.dto.trade.UserTrades;
+import org.knowm.xchange.dto.Position;
+import org.knowm.xchange.dto.trade.*;
 import org.knowm.xchange.exceptions.ExchangeException;
 import org.knowm.xchange.exceptions.NotAvailableFromExchangeException;
 import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
@@ -28,6 +27,7 @@ import org.knowm.xchange.service.trade.params.orders.OrderQueryParams;
  *   <li>Cancel user's open orders on the exchange
  *   <li>Place market orders on the exchange
  *   <li>Place limit orders on the exchange
+ *   <li>Change limit orders on the exchange
  * </ul>
  *
  * <p>The implementation of this service is expected to be based on a client polling mechanism of
@@ -121,6 +121,36 @@ public interface TradeService extends BaseService {
    */
   default String placeStopOrder(StopOrder stopOrder) throws IOException {
     throw new NotYetImplementedForExchangeException();
+  }
+
+  /**
+   * Modify or cancel/replace an existing limit order
+   *
+   * @implNote Some exchanges have API methods that allow to modify an order or cancel an existing
+   *     one and create a new one in one request.
+   *     <p>Based on exchange API there are 3 ways, how this function works:
+   *     <ol>
+   *       <li>Exchange supports existing order modify operation. Then function returns {@code
+   *           limitOrder} order ID.
+   *       <li>Exchange supports order cancel/replace by one request. Then function returns new
+   *           order ID.
+   *       <li>Exchange doesn't support any of these operations. Then function performs
+   *           cancel/replace by two separate requests, and returns new order ID (default behavior)
+   *     </ol>
+   *
+   * @param limitOrder Order's data to change
+   * @return Order ID
+   * @throws ExchangeException Indication that the exchange reported some kind of error with the
+   *     request or response
+   * @throws NotAvailableFromExchangeException Indication that the exchange does not support the
+   *     requested function or data
+   * @throws NotYetImplementedForExchangeException Indication that the exchange supports the
+   *     requested function or data, but it has not yet been implemented
+   * @throws IOException Indication that a networking error occurred while fetching JSON data
+   */
+  default String changeOrder(LimitOrder limitOrder) throws IOException {
+    cancelOrder(limitOrder.getId());
+    return placeLimitOrder(limitOrder);
   }
 
   /**
@@ -272,5 +302,21 @@ public interface TradeService extends BaseService {
    */
   default Collection<Order> getOrder(OrderQueryParams... orderQueryParams) throws IOException {
     throw new NotAvailableFromExchangeException();
+  }
+
+  default Optional<Position> getPosition() throws IOException {
+    throw new NotYetImplementedForExchangeException();
+  }
+
+  default String updateOrder(Order order) throws IOException {
+    throw new NotYetImplementedForExchangeException();
+  }
+
+  default FilledOrders getFilledOrders() throws IOException {
+    throw new NotYetImplementedForExchangeException();
+  }
+
+  default OpenOrders bulkPlaceOrders(List<LimitOrder> limitOrders) throws IOException {
+    throw new NotYetImplementedForExchangeException();
   }
 }

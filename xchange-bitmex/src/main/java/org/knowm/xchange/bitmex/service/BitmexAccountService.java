@@ -4,12 +4,16 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import org.knowm.xchange.bitmex.BitmexExchange;
 import org.knowm.xchange.bitmex.dto.account.BitmexAccount;
+import org.knowm.xchange.bitmex.dto.account.BitmexMarginAccount;
 import org.knowm.xchange.bitmex.dto.account.BitmexWallet;
 import org.knowm.xchange.currency.Currency;
 import org.knowm.xchange.dto.account.AccountInfo;
 import org.knowm.xchange.dto.account.Balance;
 import org.knowm.xchange.dto.account.Wallet;
+import org.knowm.xchange.dto.trade.Margin;
 import org.knowm.xchange.service.account.AccountService;
+import org.knowm.xchange.service.trade.params.DefaultTradeHistoryParamCurrency;
+import org.knowm.xchange.service.trade.params.TradeHistoryParams;
 
 public class BitmexAccountService extends BitmexAccountServiceRaw implements AccountService {
 
@@ -21,6 +25,10 @@ public class BitmexAccountService extends BitmexAccountServiceRaw implements Acc
   public BitmexAccountService(BitmexExchange exchange) {
 
     super(exchange);
+  }
+
+  public TradeHistoryParams createFundingHistoryParams() {
+    return new DefaultTradeHistoryParamCurrency();
   }
 
   @Override
@@ -53,5 +61,19 @@ public class BitmexAccountService extends BitmexAccountServiceRaw implements Acc
       currencyCode = "XBt";
     }
     return requestDepositAddress(currencyCode);
+  }
+
+  @Override
+  public Margin getMargin() {
+    // todo make this better
+    BitmexMarginAccount bitmexMarginAccount = getBitmexMarginAccountStatus(Currency.XBT);
+    Margin margin =
+        new Margin(
+            bitmexMarginAccount.getAvailableMargin(),
+            bitmexMarginAccount.getMarginBalance(),
+            bitmexMarginAccount.getWalletBalance(),
+            bitmexMarginAccount.getUnrealisedPnl());
+
+    return margin;
   }
 }

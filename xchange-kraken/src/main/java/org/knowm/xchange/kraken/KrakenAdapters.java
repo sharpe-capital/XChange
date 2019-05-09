@@ -1,16 +1,8 @@
 package org.knowm.xchange.kraken;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.stream.Collectors;
 import org.knowm.xchange.currency.Currency;
 import org.knowm.xchange.currency.CurrencyPair;
@@ -21,38 +13,18 @@ import org.knowm.xchange.dto.account.Balance;
 import org.knowm.xchange.dto.account.Fee;
 import org.knowm.xchange.dto.account.FundingRecord;
 import org.knowm.xchange.dto.account.Wallet;
-import org.knowm.xchange.dto.marketdata.OrderBook;
-import org.knowm.xchange.dto.marketdata.Ticker;
-import org.knowm.xchange.dto.marketdata.Trade;
-import org.knowm.xchange.dto.marketdata.Trades;
+import org.knowm.xchange.dto.marketdata.*;
 import org.knowm.xchange.dto.marketdata.Trades.TradeSortType;
 import org.knowm.xchange.dto.meta.CurrencyMetaData;
 import org.knowm.xchange.dto.meta.CurrencyPairMetaData;
 import org.knowm.xchange.dto.meta.ExchangeMetaData;
 import org.knowm.xchange.dto.meta.FeeTier;
-import org.knowm.xchange.dto.trade.LimitOrder;
-import org.knowm.xchange.dto.trade.MarketOrder;
-import org.knowm.xchange.dto.trade.OpenOrders;
-import org.knowm.xchange.dto.trade.UserTrade;
-import org.knowm.xchange.dto.trade.UserTrades;
+import org.knowm.xchange.dto.trade.*;
 import org.knowm.xchange.exceptions.NotYetImplementedForExchangeException;
 import org.knowm.xchange.kraken.dto.account.KrakenDepositAddress;
 import org.knowm.xchange.kraken.dto.account.KrakenLedger;
-import org.knowm.xchange.kraken.dto.marketdata.KrakenAsset;
-import org.knowm.xchange.kraken.dto.marketdata.KrakenAssetPair;
-import org.knowm.xchange.kraken.dto.marketdata.KrakenDepth;
-import org.knowm.xchange.kraken.dto.marketdata.KrakenFee;
-import org.knowm.xchange.kraken.dto.marketdata.KrakenPublicOrder;
-import org.knowm.xchange.kraken.dto.marketdata.KrakenPublicTrade;
-import org.knowm.xchange.kraken.dto.marketdata.KrakenTicker;
-import org.knowm.xchange.kraken.dto.trade.KrakenOrder;
-import org.knowm.xchange.kraken.dto.trade.KrakenOrderDescription;
-import org.knowm.xchange.kraken.dto.trade.KrakenOrderResponse;
-import org.knowm.xchange.kraken.dto.trade.KrakenOrderStatus;
-import org.knowm.xchange.kraken.dto.trade.KrakenOrderType;
-import org.knowm.xchange.kraken.dto.trade.KrakenTrade;
-import org.knowm.xchange.kraken.dto.trade.KrakenType;
-import org.knowm.xchange.kraken.dto.trade.KrakenUserTrade;
+import org.knowm.xchange.kraken.dto.marketdata.*;
+import org.knowm.xchange.kraken.dto.trade.*;
 
 public class KrakenAdapters {
 
@@ -86,9 +58,7 @@ public class KrakenAdapters {
 
   public static List<Order> adaptOrders(Map<String, KrakenOrder> krakenOrdersMap) {
 
-    return krakenOrdersMap
-        .entrySet()
-        .stream()
+    return krakenOrdersMap.entrySet().stream()
         .map(krakenOrderEntry -> adaptOrder(krakenOrderEntry.getKey(), krakenOrderEntry.getValue()))
         .collect(Collectors.toList());
   }
@@ -231,6 +201,14 @@ public class KrakenAdapters {
   }
 
   public static OpenOrders adaptOpenOrders(Map<String, KrakenOrder> krakenOrders) {
+    return new OpenOrders(extractLimitOrders(krakenOrders));
+  }
+
+  public static FilledOrders adaptFilledOrders(Map<String, KrakenOrder> krakenOrders) {
+    return new FilledOrders(extractLimitOrders(krakenOrders));
+  }
+
+  public static List<LimitOrder> extractLimitOrders(Map<String, KrakenOrder> krakenOrders) {
 
     List<LimitOrder> limitOrders = new ArrayList<>();
     for (Entry<String, KrakenOrder> krakenOrderEntry : krakenOrders.entrySet()) {
@@ -245,7 +223,7 @@ public class KrakenAdapters {
 
       limitOrders.add((LimitOrder) adaptOrder(krakenOrderEntry.getKey(), krakenOrder));
     }
-    return new OpenOrders(limitOrders);
+    return limitOrders;
   }
 
   public static UserTrades adaptTradesHistory(Map<String, KrakenTrade> krakenTrades) {
@@ -448,6 +426,22 @@ public class KrakenAdapters {
       }
     }
     return fundingRecords;
+  }
+
+  public static List<KLine> adaptOHLC(KrakenOHLCs krakenOHLCs) {
+    return krakenOHLCs.getOHLCs().stream()
+        .map(
+            ohlc ->
+                new KLine(
+                    ohlc.getTime(),
+                    ohlc.getOpen(),
+                    ohlc.getHigh(),
+                    ohlc.getLow(),
+                    ohlc.getClose(),
+                    BigDecimal.valueOf(ohlc.getCount()),
+                    ohlc.getVolume(),
+                    ohlc.getVwap()))
+        .collect(Collectors.toList());
   }
 
   public static OrderStatus adaptOrderStatus(KrakenOrderStatus status) {
